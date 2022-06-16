@@ -321,9 +321,27 @@ function setupAnim () {
     )
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    characterAnimations.setCharacterState(mySprite, characterAnimations.rule(Predicate.FacingDown))
-    characterAnimations.runFrames(
-    mySprite,
+    characterAnimations.setCharacterAnimationsEnabled(mySprite, false)
+    mySprite.setImage(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+    animation.runImageAnimation(
+    playerAtack,
     [img`
         ........................
         .....ffff...............
@@ -425,16 +443,39 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         ........................
         ........................
         `],
-    75,
-    characterAnimations.rule(Predicate.FacingDown)
+    100,
+    false
     )
+    pause(400)
     if (mySprite.tileKindAt(TileDirection.Bottom, assets.tile`The Knights who say Neihs Shrubry`)) {
         info.changeScoreBy(1)
         tiles.setTileAt(mySprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Bottom), sprites.castle.tileGrass3)
         tiles.setWallAt(mySprite.tilemapLocation().getNeighboringLocation(CollisionDirection.Bottom), false)
     }
-    characterAnimations.clearCharacterState(mySprite)
+    playerAtack.setImage(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+    characterAnimations.setCharacterAnimationsEnabled(mySprite, true)
 })
+controller.A.onEvent(ControllerButtonEvent.Released, function () {
+	
+})
+let playerAtack: Sprite = null
 let mySprite: Sprite = null
 info.setLife(3)
 info.setScore(0)
@@ -459,6 +500,27 @@ mySprite = sprites.create(img`
     . . . . . f f f f f f . . . . . 
     . . . . . f f . . f f . . . . . 
     `, SpriteKind.Player)
+playerAtack = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Player)
 controller.moveSprite(mySprite)
 scene.cameraFollowSprite(mySprite)
 setupAnim()
+game.onUpdate(function () {
+    playerAtack.setPosition(mySprite.x + 5, mySprite.y + 3)
+})
